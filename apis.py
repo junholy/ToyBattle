@@ -1,19 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+#WEB APIs open to out
+
 from crud import *
+import json
 
-def register(redisObj, **kwargs):
-	done = createUser(redisObj)
-	if done is None:
+def register(redisConn, **kwargs):
+	userId = createUser(redisConn)
+	if userId is None:
 		return "FAIL"
-	return "SUCCESS"
+	return {
+		'error': 'SUCCESS',
+		'result': {
+			'userId': userId,
+		},
+	}
 
-def train(redisObj, **kwargs):
+def train(redisConn, **kwargs):
 	userId = kwargs.get('id', None)
 	if userId is None:
 		return None
-	done = incStat(redisObj, userId)
+	done = incStat(redisConn, userId)
 	if done is None:
 		return "FAIL"
 	return "SUCCESS"
