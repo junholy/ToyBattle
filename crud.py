@@ -32,9 +32,11 @@ def incStat(redisConn, userId):
 		stat['power'] = int(stat['power']) + 1
 		stat['speed'] = int(stat['speed']) + 1
 		stat['technique'] = int(stat['technique']) + 1
-		redisConn.hmset(userId, stat)
+		rtn = redisConn.hmset(userId, stat)
 	except ResponseError:
 		return None
 	except:
 		return None
-	return not None
+	if not rtn:
+		return None
+	return redisConn.hgetall(userId)

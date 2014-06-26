@@ -20,14 +20,24 @@ class TestApiFunctions(unittest.TestCase):
 			'technique': '50',
 		}
 		rtn = register(self.redisConn)
-		self.assertEqual(rtn['error'], 'SUCCESS')
+		self.assertEqual(rtn['error'], 0)
 		self.assertIn('userId', rtn['result'].keys())
 		userId = rtn['result']['userId']
 		self.assertEqual(self.redisConn.hgetall(userId), stat)
 
 	def test_train(self):
-		#TODO
-		pass
+		stat = {
+			'attack': '51', 
+			'defence': '51', 
+			'stamina': '51',
+			'power': '51',
+			'speed': '51',
+			'technique': '51',
+		}
+		userId = register(self.redisConn)['result']['userId']
+		rtn = train(self.redisConn, id=userId)
+		self.assertEqual(rtn['error'], 0)
+		self.assertEqual(rtn['result']['stat'], stat)
 
 if __name__ == '__main__':
 	unittest.main()
