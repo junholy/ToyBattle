@@ -13,7 +13,6 @@ class ErrorCode(object):
 
 e = ErrorCode()
 
-
 def register(redisConn, **kwargs):
 	userId = createUser(redisConn)
 	logging.debug('user created. userId: {userId}'.format(userId=userId))

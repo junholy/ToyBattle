@@ -4,6 +4,10 @@
 #Process requests and send their responses.
 
 from apis import *
+try:
+	from modules.uwsgidecorators import postfork
+except:
+	postfork = lambda f: f
 import json
 import logging
 import os
@@ -19,18 +23,21 @@ def getRedisConn():
 	else:
 		return redisConn	
 
+@postfork
 def configureLogging():
 	try:
 		os.mkdir('log')
 	except:
 		pass
-	logging.basicConfig(filename='log/server.log', format='%(asctime)s | %(message)s', level=loglevel)
+	logging.basicConfig(
+		filename='log/server.log', 
+		format='%(asctime)s | pid {pid} | %(message)s'.format(pid=os.getpid()), 
+		level=loglevel
+		)
 
 redisConn = getRedisConn()
 if redisConn is None:
 	raise
-
-configureLogging()
 
 def application(env, start_response):
 	start_response('200 OK', [('Content-Type', 'text/html')])
@@ -48,6 +55,7 @@ def application(env, start_response):
 			logging.info('Success to parse a request. api: {apiName}, args: \
 				{args}').format(apiName=apiName, args=kwargs)
 		else:
+			pass
 			logging.info('Success to parse a request. api: {apiName}'.format(
 				apiName=apiName))
 		apiFnName = apiName

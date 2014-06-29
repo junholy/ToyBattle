@@ -10,7 +10,7 @@ class TestApiFunctions(unittest.TestCase):
 		if self.redisConn is None:
 			self.fail("Redis-server is not running.")
 
-	def test_register(self):
+	def test_api_register(self):
 		stat = {
 			'attack': '50', 
 			'defence': '50', 
@@ -25,7 +25,7 @@ class TestApiFunctions(unittest.TestCase):
 		userId = rtn['result']['userId']
 		self.assertEqual(self.redisConn.hgetall(userId), stat)
 
-	def test_train(self):
+	def test_api_train(self):
 		stat = {
 			'attack': '51', 
 			'defence': '51', 
